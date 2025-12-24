@@ -6,12 +6,17 @@ import { integrationService } from '../services/integrationService';
 jest.mock('../services/integrationService');
 const mockIntegrationService = integrationService as jest.Mocked<typeof integrationService>;
 
-// Mock authentication middleware
+// Mock authentication middleware - fix the import path and function name
 jest.mock('../middleware/authMiddleware', () => ({
-  authMiddleware: (req: any, res: any, next: any) => {
-    req.user = { id: 'test-user-id' };
+  authenticateJWT: (req: any, res: any, next: any) => {
+    req.user = { id: 'test-user-id', email: 'test@example.com', role: 'user', permissions: [] };
     next();
   },
+  authMiddleware: (req: any, res: any, next: any) => {
+    req.user = { id: 'test-user-id', email: 'test@example.com', role: 'user', permissions: [] };
+    next();
+  },
+  AuthenticatedRequest: {},
 }));
 
 describe('Integration Routes', () => {

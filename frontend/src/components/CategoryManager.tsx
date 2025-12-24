@@ -297,8 +297,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ visible, onClose }) =
                 data={bulkSuggestions}
                 renderItem={renderBulkSuggestionItem}
                 keyExtractor={(item) => item.id}
-                style={styles.suggestionsList}
-                maxHeight={300}
+                style={[styles.suggestionsList, { maxHeight: 300 }]}
               />
               
               <View style={styles.bulkActions}>

@@ -296,6 +296,8 @@ const TrendAnalysis: React.FC<TrendAnalysisProps> = ({
                   data={chartData}
                   width={screenWidth - 60}
                   height={220}
+                  yAxisLabel=""
+                  yAxisSuffix=""
                   chartConfig={chartConfig}
                   style={styles.chart}
                 />

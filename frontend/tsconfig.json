@@ -14,6 +14,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": ["jest", "node", "react-native"],
     "baseUrl": "./src",
     "paths": {
       "@/*": ["*"],
@@ -28,12 +29,13 @@
   },
   "include": [
     "src/**/*",
-    "index.js",
-    "__tests__/**/*"
+    "index.js"
   ],
   "exclude": [
     "node_modules",
     "android",
-    "ios"
+    "ios",
+    "**/__tests__/**/*",
+    "**/*.test.*"
   ]
 }

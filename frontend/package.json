@@ -64,6 +64,7 @@
     "@types/react": "^18.2.39",
     "@types/react-native": "^0.72.7",
     "@types/react-test-renderer": "^18.0.7",
+    "@types/jest": "^29.5.8",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",
     "babel-jest": "^29.7.0",
@@ -77,6 +78,9 @@
   },
   "jest": {
     "preset": "react-native",
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ],
     "setupFilesAfterEnv": [
       "@testing-library/jest-native/extend-expect"
     ],
@@ -88,13 +92,24 @@
       "json",
       "node"
     ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|@react-native|react-native-vector-icons|react-native-svg|react-native-chart-kit)/)"
+      "node_modules/(?!(react-native|@react-native|@react-native-voice|react-native-vector-icons|react-native-svg|react-native-chart-kit|react-native-paper|react-native-elements|react-native-reanimated|react-native-gesture-handler)/)"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/android/",
+      "/ios/"
     ],
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!src/**/*.d.ts",
       "!src/index.tsx"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
   }
 }
