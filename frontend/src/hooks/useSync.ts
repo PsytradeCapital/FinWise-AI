@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
+// Note: @react-native-community/netinfo would need to be installed for full functionality
+// For now, we'll use a simple connectivity check
 import { syncService, SyncStatus } from '../services/syncService';
 
 export interface UseSyncReturn {
