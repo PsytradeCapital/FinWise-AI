@@ -57,10 +57,10 @@ This implementation plan breaks down the FinWise AI development into discrete, m
     - **Property 3: Error Handling and Fallback**
     - **Validates: Requirements 1.3, 7.4**
 
-- [-] 4. Checkpoint - Ensure transaction parsing works correctly
+- [x] 4. Checkpoint - Ensure transaction parsing works correctly
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. Create Categorization Popup Component
+- [-] 5. Create Categorization Popup Component
   - [ ] 5.1 Build React Native categorization popup UI
     - Design non-intrusive popup interface
     - Implement text input with auto-suggestion functionality
