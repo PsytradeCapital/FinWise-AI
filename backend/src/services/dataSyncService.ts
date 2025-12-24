@@ -9,7 +9,7 @@ import {
   MoneyStory,
   Category,
   Notification
-} from '../../../shared/src/types';
+} from '@finwise-ai/shared';
 
 export interface SyncableData {
   id: string;

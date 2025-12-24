@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Text, Card, SegmentedButtons, Button } from 'react-native-paper';
 import { PieChart, LineChart } from 'react-native-chart-kit';
-import { Transaction } from '@shared/types';
+import { Transaction } from '@finwise-ai/shared';
 import { theme } from '../theme';
 import { format, startOfDay, startOfWeek, startOfMonth, endOfDay, endOfWeek, endOfMonth, subDays, subWeeks, subMonths } from 'date-fns';
 

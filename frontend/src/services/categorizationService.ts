@@ -1,4 +1,4 @@
-import { Transaction, Category } from '@shared/types';
+import { Transaction, Category } from '@finwise-ai/shared';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface CategorySuggestion {

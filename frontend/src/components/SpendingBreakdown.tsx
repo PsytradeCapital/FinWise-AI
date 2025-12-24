@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { Text, Card, List, Chip, Button, Divider } from 'react-native-paper';
-import { Transaction } from '@shared/types';
+import { Transaction } from '@finwise-ai/shared';
 import { theme } from '../theme';
 import { format } from 'date-fns';
 

@@ -1,4 +1,4 @@
-import { Transaction, Category } from '@shared/types';
+import { Transaction, Category } from '@finwise-ai/shared';
 import CategorizationService from './categorizationService';
 
 export interface BulkCategorizationSuggestion {

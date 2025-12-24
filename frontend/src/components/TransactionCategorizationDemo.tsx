@@ -5,7 +5,7 @@ import { RootState } from '../store';
 import CategorizationPopup from './CategorizationPopup';
 import TransactionEditor from './TransactionEditor';
 import CategoryManager from './CategoryManager';
-import { Transaction } from '@shared/types';
+import { Transaction } from '@finwise-ai/shared';
 
 /**
  * Demo component showing how the categorization components work together

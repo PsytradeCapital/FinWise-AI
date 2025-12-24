@@ -1,6 +1,7 @@
 import { db } from '../config/firebase';
+import { FieldValue } from 'firebase-admin/firestore';
 import { logger } from '../utils/logger';
-import { dataSyncService } from './dataSyncService';
+import { dataSyncService, SyncableData } from './dataSyncService';
 
 export interface OfflineOperation {
   id: string;
@@ -133,10 +134,10 @@ export class OfflineDataService {
         if (existingDoc.exists) {
           const existingData = existingDoc.data();
           const localData = { ...operation.data, lastModified: operation.timestamp };
-          const remoteData = existingData;
+          const remoteData = existingData as SyncableData;
 
           // Resolve conflicts if versions differ
-          if (existingData?.version && operation.data.version && existingData.version !== operation.data.version) {
+          if (existingData?.version && operation.data.version && existingData.version !== operation.data.version && remoteData) {
             const resolution = await dataSyncService.resolveConflicts(
               operation.collection,
               operation.documentId,
@@ -147,13 +148,13 @@ export class OfflineDataService {
             await docRef.update({
               ...resolution.resolvedData,
               lastModified: new Date(),
-              version: db.FieldValue.increment(1)
+              version: FieldValue.increment(1)
             });
           } else {
             await docRef.update({
               ...operation.data,
               lastModified: new Date(),
-              version: db.FieldValue.increment(1)
+              version: FieldValue.increment(1)
             });
           }
         } else {

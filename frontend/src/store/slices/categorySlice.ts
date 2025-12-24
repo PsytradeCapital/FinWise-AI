@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Category } from '@shared/types';
+import { Category } from '@finwise-ai/shared';
 
 interface CategoryState {
   categories: Category[];

@@ -15,7 +15,7 @@ import { RootState } from '../store';
 import { addCategory, updateCategory, deleteCategory } from '../store/slices/categorySlice';
 import { updateTransaction } from '../store/slices/transactionSlice';
 import { useCategorization } from '../hooks/useCategorization';
-import { Category, Transaction } from '@shared/types';
+import { Category, Transaction } from '@finwise-ai/shared';
 
 interface CategoryManagerProps {
   visible: boolean;

@@ -1,4 +1,5 @@
 import { SavingsGoal, Transaction, AutomationRule, User } from '@finwise-ai/shared';
+import { logger } from '../utils/logger';
 
 export interface SavingsCalculation {
   amount: number;

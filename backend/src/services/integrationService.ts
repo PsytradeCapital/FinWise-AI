@@ -5,7 +5,7 @@ import { SavingsAutomatorService } from './savingsAutomatorService';
 import { NotificationService } from './notificationService';
 import { MoneyStoryService } from './moneyStoryService';
 import { dataSyncService } from './dataSyncService';
-import { Transaction, User, SavingsGoal } from '../../../shared/src/types';
+import { Transaction, User, SavingsGoal } from '@finwise-ai/shared';
 
 export class IntegrationService {
   private static instance: IntegrationService;
@@ -155,8 +155,8 @@ export class IntegrationService {
       // Analyze spending patterns
       const analysis = await this.aiAdvisorService.analyzeSpendingPatterns(userId);
 
-      // Generate advice if needed
-      if (analysis.needsAdvice) {
+      // Generate advice if patterns show concerning anomaly scores
+      if (analysis.length > 0 && analysis.some(pattern => pattern.anomalyScore > 0.7)) {
         const advice = await this.aiAdvisorService.generateAdvice(userId);
         
         if (advice.length > 0) {
@@ -366,7 +366,7 @@ export class IntegrationService {
       const results = await Promise.allSettled(services);
       const allHealthy = results.every(result => 
         result.status === 'fulfilled' && 
-        (result.value === true || (typeof result.value === 'object' && result.value.status === 'healthy'))
+        (result.value === true || (typeof result.value === 'object' && result.value !== null && 'status' in result.value && result.value.status === 'healthy'))
       );
 
       logger.info('Integration service health check completed', { allHealthy });

@@ -1,4 +1,4 @@
-import { Transaction, SpendingPattern, Advice, User } from '../../../shared/src/types';
+import { Transaction, SpendingPattern, Advice, User } from '@finwise-ai/shared';
 import { logger } from '../utils/logger';
 
 /**

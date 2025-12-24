@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SavingsGoal } from '@shared/types';
+import { SavingsGoal } from '@finwise-ai/shared';
 
 interface GoalState {
   goals: SavingsGoal[];

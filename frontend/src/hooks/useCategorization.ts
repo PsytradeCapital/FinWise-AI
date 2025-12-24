@@ -4,7 +4,7 @@ import { RootState } from '../store';
 import { addCategory, updateCategory } from '../store/slices/categorySlice';
 import { updateTransaction } from '../store/slices/transactionSlice';
 import CategorizationService, { CategorySuggestion } from '../services/categorizationService';
-import { Transaction, Category } from '@shared/types';
+import { Transaction, Category } from '@finwise-ai/shared';
 
 export interface UseCategorization {
   suggestions: CategorySuggestion[];

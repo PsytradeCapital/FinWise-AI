@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Notification } from '@shared/types';
+import { Notification } from '@finwise-ai/shared';
 
 interface NotificationState {
   notifications: Notification[];

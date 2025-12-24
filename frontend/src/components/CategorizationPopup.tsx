@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Voice from '@react-native-voice/voice';
-import { Transaction, Category } from '@shared/types';
+import { Transaction, Category } from '@finwise-ai/shared';
 import { RootState } from '../store';
 import { updateTransaction } from '../store/slices/transactionSlice';
 import { addCategory } from '../store/slices/categorySlice';

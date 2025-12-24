@@ -145,7 +145,7 @@ const ExportModal: React.FC<ExportModalProps> = ({ visible, onClose, onExport })
                   ]}>Landscape</Text>
                 </TouchableOpacity>
               </View>
-            </div>
+            </View>
           </View>
 
           {/* Content Options */}

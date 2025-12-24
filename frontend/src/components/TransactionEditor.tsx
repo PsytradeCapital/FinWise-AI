@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { updateTransaction, deleteTransaction } from '../store/slices/transactionSlice';
 import { useCategorization } from '../hooks/useCategorization';
-import { Transaction, Category } from '@shared/types';
+import { Transaction, Category } from '@finwise-ai/shared';
 
 interface TransactionEditorProps {
   visible: boolean;

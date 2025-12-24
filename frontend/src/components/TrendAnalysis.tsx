@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Text, Card, SegmentedButtons, Chip } from 'react-native-paper';
 import { LineChart, BarChart } from 'react-native-chart-kit';
-import { Transaction } from '@shared/types';
+import { Transaction } from '@finwise-ai/shared';
 import { theme } from '../theme';
 import { 
   format, 

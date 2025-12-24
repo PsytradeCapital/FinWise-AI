@@ -1,4 +1,4 @@
-import { Transaction, SpendingPattern, Anomaly, Advice, User, Notification } from '../../../shared/src/types';
+import { Transaction, SpendingPattern, Anomaly, Advice, User, Notification } from '@finwise-ai/shared';
 import { AnomalyDetectionService } from './anomalyDetectionService';
 import { RecommendationEngine } from './recommendationEngine';
 import { NotificationService } from './notificationService';
