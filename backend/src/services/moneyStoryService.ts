@@ -231,16 +231,34 @@ export class MoneyStoryService {
    */
   private async generateSuggestions(context: StoryContext, insights: StoryInsight[]): Promise<string[]> {
     const suggestions: string[] = [];
+    const { transactions, user } = context;
     
-    // Extract suggestions from insights
+    // Prioritize Kenyan-specific suggestions for KE users
+    if (user.country === 'KE') {
+      // Always add these Kenyan-specific suggestions first
+      suggestions.push('Take advantage of M-Pesa savings features to automate your financial goals');
+      suggestions.push('Consider exploring local investment opportunities like Nabo Capital for long-term growth');
+      
+      // Add more Kenyan-specific suggestions based on spending
+      const categorySpending = this.calculateCategorySpending(transactions);
+      if (categorySpending['Transport'] && categorySpending['Transport'] > 2000) {
+        suggestions.push('Try using matatu savings apps to reduce your transport costs');
+      }
+    }
+
+    // Suggest savings automation if no active goals (prioritize this suggestion)
+    if (context.savingsGoals.filter(g => g.isActive).length === 0) {
+      suggestions.push('Consider setting up a savings goal to build your financial future');
+    }
+    
+    // Extract suggestions from insights (add after priority suggestions)
     insights.forEach(insight => {
-      if (insight.suggestion) {
+      if (insight.suggestion && suggestions.length < 5) {
         suggestions.push(insight.suggestion);
       }
     });
 
-    // Add general suggestions based on context
-    const { transactions, user } = context;
+    // Add general suggestions based on context if we still have room
     const categorySpending = this.calculateCategorySpending(transactions);
     
     // Suggest budget categories if spending is concentrated
@@ -248,30 +266,13 @@ export class MoneyStoryService {
       .sort(([,a], [,b]) => b - a)
       .slice(0, 3);
     
-    if (topCategories.length > 0) {
+    if (topCategories.length > 0 && suggestions.length < 5) {
       suggestions.push(`Focus on budgeting for your top spending categories: ${topCategories.map(([cat]) => cat).join(', ')}`);
     }
 
-    // Suggest savings automation if no active goals
-    if (context.savingsGoals.filter(g => g.isActive).length === 0) {
-      suggestions.push('Consider setting up a savings goal to build your financial future');
-    }
-
-    // Local context suggestions for Kenyan users (add these first to ensure they're included)
-    if (user.country === 'KE') {
-      // Always add these Kenyan-specific suggestions at the beginning
-      suggestions.unshift('Take advantage of M-Pesa savings features to automate your financial goals');
-      suggestions.unshift('Consider exploring local investment opportunities like Nabo Capital for long-term growth');
-      
-      // Add more Kenyan-specific suggestions based on spending
-      if (categorySpending['Transport'] && categorySpending['Transport'] > 2000) {
-        suggestions.unshift('Try using matatu savings apps to reduce your transport costs');
-      }
-      
-      // Add general Kenyan financial advice
-      if (suggestions.length < 3) {
-        suggestions.unshift('Consider using mobile banking to track your shillings more effectively');
-      }
+    // Add general Kenyan financial advice if we need more suggestions and user is Kenyan
+    if (user.country === 'KE' && suggestions.length < 5) {
+      suggestions.push('Consider using mobile banking to track your shillings more effectively');
     }
 
     return suggestions.slice(0, 5); // Limit to 5 suggestions

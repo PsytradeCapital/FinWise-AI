@@ -199,7 +199,7 @@ This implementation plan breaks down the FinWise AI development into discrete, m
     - **Property 20: Report Export Functionality**
     - **Validates: Requirements 5.5**
 
-- [ ] 10. Implement Money Story Generator
+- [x] 10. Implement Money Story Generator
   - [x] 10.1 Create narrative generation system
     - Build story template system for spending narratives
     - Implement sentiment analysis for spending behavior
@@ -215,8 +215,8 @@ This implementation plan breaks down the FinWise AI development into discrete, m
     - **Property 22: Story Personalization**
     - **Validates: Requirements 6.3**
 
-- [ ] 11. Integrate External Services
-  - [ ] 11.1 Implement M-Pesa API integration
+- [-] 11. Integrate External Services
+  - [-] 11.1 Implement M-Pesa API integration
     - Create OAuth 2.0 authentication flow for M-Pesa
     - Build transaction polling and webhook handling
     - Add error handling and fallback mechanisms

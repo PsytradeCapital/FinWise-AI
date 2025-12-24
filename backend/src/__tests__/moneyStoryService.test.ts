@@ -235,9 +235,6 @@ describe('MoneyStoryService', () => {
       expect(story).toBeDefined();
       expect(story.narrative).toBeDefined();
       
-      // Debug: log the suggestions to see what's being generated
-      console.log('Generated suggestions:', story.suggestions);
-      
       // Should suggest setting up savings goals
       const hasSavingsSuggestion = story.suggestions.some(suggestion => 
         suggestion.includes('savings goal')
