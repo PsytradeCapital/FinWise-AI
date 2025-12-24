@@ -1,8 +1,16 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { dataSyncService, DeviceInfo } from '../services/dataSyncService';
 import { offlineDataService } from '../services/offlineDataService';
 import { authMiddleware } from '../middleware/authMiddleware';
 import { logger } from '../utils/logger';
+
+// Extend Request interface to include user property
+interface AuthenticatedRequest extends Request {
+  user?: {
+    uid: string;
+    [key: string]: any;
+  };
+}
 
 const router = express.Router();
 
@@ -12,16 +20,17 @@ router.use(authMiddleware);
 /**
  * Register a device for sync
  */
-router.post('/devices/register', async (req, res) => {
+router.post('/devices/register', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { deviceId, platform, appVersion } = req.body;
     const userId = req.user?.uid;
 
     if (!deviceId || !platform || !appVersion) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Missing required fields: deviceId, platform, appVersion'
       });
+      return;
     }
 
     const deviceInfo: DeviceInfo = {
@@ -51,7 +60,7 @@ router.post('/devices/register', async (req, res) => {
 /**
  * Update device activity
  */
-router.post('/devices/:deviceId/activity', async (req, res) => {
+router.post('/devices/:deviceId/activity', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { deviceId } = req.params;
 
@@ -73,7 +82,7 @@ router.post('/devices/:deviceId/activity', async (req, res) => {
 /**
  * Get all devices for a user
  */
-router.get('/devices', async (req, res) => {
+router.get('/devices', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user?.uid;
     const devices = await dataSyncService.getUserDevices(userId!);
@@ -94,7 +103,7 @@ router.get('/devices', async (req, res) => {
 /**
  * Perform full sync for a device
  */
-router.post('/devices/:deviceId/full-sync', async (req, res) => {
+router.post('/devices/:deviceId/full-sync', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { deviceId } = req.params;
     const userId = req.user?.uid;
@@ -118,17 +127,18 @@ router.post('/devices/:deviceId/full-sync', async (req, res) => {
 /**
  * Get data changes since last sync
  */
-router.get('/devices/:deviceId/changes', async (req, res) => {
+router.get('/devices/:deviceId/changes', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { deviceId } = req.params;
     const { since } = req.query;
     const userId = req.user?.uid;
 
     if (!since) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Missing required parameter: since (timestamp)'
       });
+      return;
     }
 
     const sinceDate = new Date(since as string);
@@ -150,7 +160,7 @@ router.get('/devices/:deviceId/changes', async (req, res) => {
 /**
  * Get pending sync operations for a device
  */
-router.get('/devices/:deviceId/pending', async (req, res) => {
+router.get('/devices/:deviceId/pending', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { deviceId } = req.params;
     const userId = req.user?.uid;
@@ -173,16 +183,17 @@ router.get('/devices/:deviceId/pending', async (req, res) => {
 /**
  * Mark sync operation as completed
  */
-router.post('/operations/:operationId/complete', async (req, res) => {
+router.post('/operations/:operationId/complete', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { operationId } = req.params;
     const { deviceId } = req.body;
 
     if (!deviceId) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Missing required field: deviceId'
       });
+      return;
     }
 
     await dataSyncService.markSyncCompleted(operationId, deviceId);
@@ -203,16 +214,17 @@ router.post('/operations/:operationId/complete', async (req, res) => {
 /**
  * Store offline operation
  */
-router.post('/offline/operations', async (req, res) => {
+router.post('/offline/operations', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { operation, collection, documentId, data, deviceId } = req.body;
     const userId = req.user?.uid;
 
     if (!operation || !collection || !documentId || !data || !deviceId) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Missing required fields: operation, collection, documentId, data, deviceId'
       });
+      return;
     }
 
     const operationId = await offlineDataService.storeOfflineOperation({
@@ -242,16 +254,17 @@ router.post('/offline/operations', async (req, res) => {
 /**
  * Sync offline operations
  */
-router.post('/offline/sync', async (req, res) => {
+router.post('/offline/sync', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { deviceId } = req.body;
     const userId = req.user?.uid;
 
     if (!deviceId) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Missing required field: deviceId'
       });
+      return;
     }
 
     const syncResult = await offlineDataService.syncOfflineOperations(userId!, deviceId);
@@ -273,7 +286,7 @@ router.post('/offline/sync', async (req, res) => {
 /**
  * Get cached data for offline access
  */
-router.get('/offline/cache/:collection', async (req, res) => {
+router.get('/offline/cache/:collection', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { collection } = req.params;
     const userId = req.user?.uid;
@@ -296,16 +309,17 @@ router.get('/offline/cache/:collection', async (req, res) => {
 /**
  * Perform auto sync
  */
-router.post('/auto-sync', async (req, res) => {
+router.post('/auto-sync', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { deviceId } = req.body;
     const userId = req.user?.uid;
 
     if (!deviceId) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Missing required field: deviceId'
       });
+      return;
     }
 
     await offlineDataService.performAutoSync(userId!, deviceId);
@@ -326,7 +340,7 @@ router.post('/auto-sync', async (req, res) => {
 /**
  * Check connectivity status
  */
-router.get('/status', async (req, res) => {
+router.get('/status', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const isOnline = await offlineDataService.isOnlineAndCanSync();
 

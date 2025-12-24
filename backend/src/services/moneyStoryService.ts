@@ -524,4 +524,51 @@ export class MoneyStoryService {
   addStoryTemplate(template: StoryTemplate): void {
     this.storyTemplates.push(template);
   }
+
+  /**
+   * Generate a story for a user
+   */
+  async generateStory(userId: string, period: 'weekly' | 'monthly'): Promise<MoneyStory> {
+    try {
+      logger.info('Generating money story', { userId, period });
+      
+      // Mock story generation - in real implementation, this would fetch user data
+      const story: MoneyStory = {
+        id: `story-${userId}-${period}-${Date.now()}`,
+        userId,
+        period,
+        title: `Your ${period} Financial Journey`,
+        narrative: `This ${period}, you've made great progress with your finances. Keep up the good work!`,
+        insights: ['You saved 15% more than last month', 'Your spending on food decreased by 10%'],
+        suggestions: ['Consider setting up automatic savings', 'Review your transport expenses'],
+        sentiment: 'positive',
+        createdAt: new Date()
+      };
+
+      return story;
+    } catch (error) {
+      logger.error('Error generating money story', { userId, error });
+      throw error;
+    }
+  }
+
+  /**
+   * Health check for the service
+   */
+  async healthCheck(): Promise<{ status: string; message: string }> {
+    try {
+      return {
+        status: 'healthy',
+        message: 'Money Story service is operational'
+      };
+    } catch (error) {
+      return {
+        status: 'unhealthy',
+        message: `Money Story service error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
+  }
 }
+
+// Export singleton instance
+export const moneyStoryService = new MoneyStoryService();

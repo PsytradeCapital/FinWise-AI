@@ -19,7 +19,7 @@ router.post('/link-account', async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const result = await naboCapitalService.linkAccount({
+    const result = await naboCapitalService.getInstance().linkAccount({
       userId,
       phoneNumber,
       idNumber,
@@ -60,7 +60,7 @@ router.post('/verify-linking/:linkingId', async (req: Request, res: Response): P
       return;
     }
 
-    const result = await naboCapitalService.verifyAccountLinking(linkingId, verificationCode);
+    const result = await naboCapitalService.getInstance().verifyAccountLinking(linkingId, verificationCode);
 
     res.json({
       success: true,
@@ -86,7 +86,7 @@ router.get('/accounts/:userId', async (req: Request, res: Response): Promise<voi
   try {
     const { userId } = req.params;
 
-    const accounts = await naboCapitalService.getAccounts(userId);
+    const accounts = await naboCapitalService.getInstance().getAccounts(userId);
 
     res.json({
       success: true,
@@ -130,7 +130,7 @@ router.post('/transfer', async (req: Request, res: Response): Promise<void> => {
       scheduledDate: scheduledDate ? new Date(scheduledDate) : undefined,
     };
 
-    const result = await naboCapitalService.initiateTransfer(transferRequest);
+    const result = await naboCapitalService.getInstance().initiateTransfer(transferRequest);
 
     res.json({
       success: true,
@@ -155,7 +155,7 @@ router.get('/transfer/:transferId', async (req: Request, res: Response): Promise
   try {
     const { transferId } = req.params;
 
-    const result = await naboCapitalService.getTransferStatus(transferId);
+    const result = await naboCapitalService.getInstance().getTransferStatus(transferId);
 
     res.json({
       success: true,
@@ -182,7 +182,7 @@ router.post('/transfer/:transferId/cancel', async (req: Request, res: Response):
     const { transferId } = req.params;
     const { reason } = req.body;
 
-    const result = await naboCapitalService.cancelTransfer(transferId, reason);
+    const result = await naboCapitalService.getInstance().cancelTransfer(transferId, reason);
 
     res.json({
       success: true,
@@ -227,7 +227,7 @@ router.get('/transfers/:userId', async (req: Request, res: Response): Promise<vo
       options.offset = parseInt(offset as string, 10);
     }
 
-    const result = await naboCapitalService.getTransferHistory(userId, options);
+    const result = await naboCapitalService.getInstance().getTransferHistory(userId, options);
 
     res.json({
       success: true,
@@ -276,7 +276,7 @@ router.post('/automation/savings-rules', async (req: Request, res: Response): Pr
       targetAccount,
     };
 
-    const result = await naboCapitalService.setupAutomatedSavings(userId, rules);
+    const result = await naboCapitalService.getInstance().setupAutomatedSavings(userId, rules);
 
     res.json({
       success: true,
@@ -299,7 +299,7 @@ router.post('/automation/savings-rules', async (req: Request, res: Response): Pr
  */
 router.get('/health', async (req: Request, res: Response): Promise<void> => {
   try {
-    const health = await naboCapitalService.getHealthStatus();
+    const health = await naboCapitalService.getInstance().getHealthStatus();
 
     res.json({
       success: true,

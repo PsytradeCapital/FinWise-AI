@@ -513,29 +513,6 @@ export class AIAdvisorService {
   }
 
   /**
-   * Generate savings offer for a user
-   */
-  async generateSavingsOffer(userId: string, transactionId?: string): Promise<any> {
-    try {
-      logger.info('Generating savings offer', { userId, transactionId });
-      
-      return {
-        id: `offer-${userId}-${Date.now()}`,
-        userId,
-        type: 'round_up_savings',
-        title: 'Round Up Your Purchase',
-        description: 'Save the spare change from this transaction automatically',
-        amount: 50, // KES
-        validUntil: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
-        transactionId
-      };
-    } catch (error) {
-      logger.error('Error generating savings offer', { userId, error });
-      throw error;
-    }
-  }
-
-  /**
    * Generate emergency savings offer
    */
   async generateEmergencySavingsOffer(userId: string): Promise<any> {

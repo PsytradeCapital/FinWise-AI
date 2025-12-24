@@ -13,18 +13,19 @@ const milestoneService = new MilestoneService(notificationService);
  * Generate PDF financial report
  * POST /api/reports/financial-pdf
  */
-router.post('/financial-pdf', async (req: Request, res: Response) => {
+router.post('/financial-pdf', async (req: Request, res: Response): Promise<void> => {
   try {
     const { reportData, options }: { reportData: FinancialReportData; options?: Partial<PDFExportOptions> } = req.body;
 
     // Validate report data
     const validation = pdfExportService.validateReportData(reportData);
     if (!validation.isValid) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Invalid report data',
         details: validation.errors
       });
+      return;
     }
 
     // Generate PDF
@@ -49,15 +50,16 @@ router.post('/financial-pdf', async (req: Request, res: Response) => {
  * Generate PDF savings goals report
  * POST /api/reports/savings-goals-pdf
  */
-router.post('/savings-goals-pdf', async (req: Request, res: Response) => {
+router.post('/savings-goals-pdf', async (req: Request, res: Response): Promise<void> => {
   try {
     const { user, goals, options } = req.body;
 
     if (!user || !goals) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'User and goals data are required'
       });
+      return;
     }
 
     const pdfBuffer = await pdfExportService.generateSavingsGoalReport(user, goals, options);
@@ -80,15 +82,16 @@ router.post('/savings-goals-pdf', async (req: Request, res: Response) => {
  * Generate PDF spending analysis report
  * POST /api/reports/spending-analysis-pdf
  */
-router.post('/spending-analysis-pdf', async (req: Request, res: Response) => {
+router.post('/spending-analysis-pdf', async (req: Request, res: Response): Promise<void> => {
   try {
     const { user, transactions, patterns, options } = req.body;
 
     if (!user || !transactions || !patterns) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'User, transactions, and patterns data are required'
       });
+      return;
     }
 
     const pdfBuffer = await pdfExportService.generateSpendingAnalysisReport(user, transactions, patterns, options);
@@ -193,15 +196,16 @@ router.get('/milestones/goal/:goalId/progress', async (req: Request, res: Respon
  * Check for new milestones (typically called after goal updates)
  * POST /api/reports/milestones/check
  */
-router.post('/milestones/check', async (req: Request, res: Response) => {
+router.post('/milestones/check', async (req: Request, res: Response): Promise<void> => {
   try {
     const { goal, previousAmount, user } = req.body;
 
     if (!goal || previousAmount === undefined || !user) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Goal, previous amount, and user data are required'
       });
+      return;
     }
 
     const newMilestones = await milestoneService.checkSavingsGoalMilestones(goal, previousAmount, user);
@@ -226,15 +230,16 @@ router.post('/milestones/check', async (req: Request, res: Response) => {
  * Check spending reduction milestones
  * POST /api/reports/milestones/spending-reduction
  */
-router.post('/milestones/spending-reduction', async (req: Request, res: Response) => {
+router.post('/milestones/spending-reduction', async (req: Request, res: Response): Promise<void> => {
   try {
     const { userId, currentPatterns, previousPatterns } = req.body;
 
     if (!userId || !currentPatterns || !previousPatterns) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'User ID, current patterns, and previous patterns are required'
       });
+      return;
     }
 
     const newMilestones = await milestoneService.checkSpendingReductionMilestones(
@@ -263,15 +268,16 @@ router.post('/milestones/spending-reduction', async (req: Request, res: Response
  * Check budget streak milestones
  * POST /api/reports/milestones/budget-streak
  */
-router.post('/milestones/budget-streak', async (req: Request, res: Response) => {
+router.post('/milestones/budget-streak', async (req: Request, res: Response): Promise<void> => {
   try {
     const { userId, consecutiveBudgetDays } = req.body;
 
     if (!userId || consecutiveBudgetDays === undefined) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'User ID and consecutive budget days are required'
       });
+      return;
     }
 
     const newMilestones = await milestoneService.checkBudgetStreakMilestones(userId, consecutiveBudgetDays);

@@ -9,16 +9,17 @@ const moneyStoryService = new MoneyStoryService();
  * Generate a new money story
  * POST /api/stories/generate
  */
-router.post('/generate', async (req: Request, res: Response) => {
+router.post('/generate', async (req: Request, res: Response): Promise<void> => {
   try {
     const { user, transactions, spendingPatterns, savingsGoals, period, startDate, endDate } = req.body;
 
     // Validate required fields
     if (!user || !transactions || !period) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'User, transactions, and period are required'
       });
+      return;
     }
 
     // Create story context
@@ -218,16 +219,17 @@ router.get('/templates', async (req: Request, res: Response) => {
  * Add custom story template
  * POST /api/stories/templates
  */
-router.post('/templates', async (req: Request, res: Response) => {
+router.post('/templates', async (req: Request, res: Response): Promise<void> => {
   try {
     const template = req.body;
 
     // Validate template structure
     if (!template.id || !template.name || !template.pattern || !template.sentiment) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Template must have id, name, pattern, and sentiment'
       });
+      return;
     }
 
     moneyStoryService.addStoryTemplate(template);

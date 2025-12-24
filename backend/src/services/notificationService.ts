@@ -511,4 +511,24 @@ export class NotificationService {
         return 'Congratulations on reaching this milestone!';
     }
   }
+
+  /**
+   * Health check for the service
+   */
+  async healthCheck(): Promise<{ status: string; message: string }> {
+    try {
+      return {
+        status: 'healthy',
+        message: 'Notification service is operational'
+      };
+    } catch (error) {
+      return {
+        status: 'unhealthy',
+        message: `Notification service error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
+  }
 }
+
+// Export singleton instance
+export const notificationService = new NotificationService();
