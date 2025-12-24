@@ -1,10 +1,10 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { asyncHandler } from '../middleware/errorHandler';
 
 const router = Router();
 
 // GET /api/v1/categories - Get categories
-router.get('/', asyncHandler(async (req, res) => {
+router.get('/', asyncHandler(async (req: Request, res: Response) => {
   // TODO: Implement categories listing
   res.json({
     success: true,
@@ -14,7 +14,7 @@ router.get('/', asyncHandler(async (req, res) => {
 }));
 
 // POST /api/v1/categories - Create custom category
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/', asyncHandler(async (req: Request, res: Response) => {
   // TODO: Implement category creation
   res.status(201).json({
     success: true,

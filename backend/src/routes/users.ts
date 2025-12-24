@@ -1,10 +1,10 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { asyncHandler } from '../middleware/errorHandler';
 
 const router = Router();
 
 // GET /api/v1/users - Get all users (admin only)
-router.get('/', asyncHandler(async (req, res) => {
+router.get('/', asyncHandler(async (req: Request, res: Response) => {
   // TODO: Implement user listing with proper authentication
   res.json({
     success: true,
@@ -14,7 +14,7 @@ router.get('/', asyncHandler(async (req, res) => {
 }));
 
 // GET /api/v1/users/:id - Get user by ID
-router.get('/:id', asyncHandler(async (req, res) => {
+router.get('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   // TODO: Implement user retrieval
   res.json({
@@ -25,7 +25,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 }));
 
 // POST /api/v1/users - Create new user
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/', asyncHandler(async (req: Request, res: Response) => {
   // TODO: Implement user creation
   res.status(201).json({
     success: true,
@@ -35,7 +35,7 @@ router.post('/', asyncHandler(async (req, res) => {
 }));
 
 // PUT /api/v1/users/:id - Update user
-router.put('/:id', asyncHandler(async (req, res) => {
+router.put('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   // TODO: Implement user update
   res.json({
@@ -46,7 +46,7 @@ router.put('/:id', asyncHandler(async (req, res) => {
 }));
 
 // DELETE /api/v1/users/:id - Delete user
-router.delete('/:id', asyncHandler(async (req, res) => {
+router.delete('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   // TODO: Implement user deletion
   res.json({

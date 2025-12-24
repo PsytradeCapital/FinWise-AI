@@ -1,10 +1,10 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { asyncHandler } from '../middleware/errorHandler';
 
 const router = Router();
 
 // GET /api/v1/goals - Get user savings goals
-router.get('/', asyncHandler(async (req, res) => {
+router.get('/', asyncHandler(async (req: Request, res: Response) => {
   // TODO: Implement goals listing
   res.json({
     success: true,
@@ -14,7 +14,7 @@ router.get('/', asyncHandler(async (req, res) => {
 }));
 
 // GET /api/v1/goals/:id - Get goal by ID
-router.get('/:id', asyncHandler(async (req, res) => {
+router.get('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   // TODO: Implement goal retrieval
   res.json({
@@ -25,7 +25,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 }));
 
 // POST /api/v1/goals - Create new savings goal
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/', asyncHandler(async (req: Request, res: Response) => {
   // TODO: Implement goal creation
   res.status(201).json({
     success: true,
@@ -35,7 +35,7 @@ router.post('/', asyncHandler(async (req, res) => {
 }));
 
 // PUT /api/v1/goals/:id - Update goal
-router.put('/:id', asyncHandler(async (req, res) => {
+router.put('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   // TODO: Implement goal update
   res.json({
@@ -46,7 +46,7 @@ router.put('/:id', asyncHandler(async (req, res) => {
 }));
 
 // DELETE /api/v1/goals/:id - Delete goal
-router.delete('/:id', asyncHandler(async (req, res) => {
+router.delete('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   // TODO: Implement goal deletion
   res.json({

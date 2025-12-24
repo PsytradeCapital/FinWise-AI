@@ -1,5 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Transaction } from '@shared/types';
+import { Transaction } from '@finwise-ai/shared';
+import { 
+  fetchTransactions, 
+  parseSMSTransaction, 
+  createManualTransaction, 
+  updateTransactionThunk, 
+  deleteTransactionThunk 
+} from '../thunks/transactionThunks';
 
 interface TransactionState {
   transactions: Transaction[];
@@ -51,6 +58,63 @@ const transactionSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+  },
+  extraReducers: (builder) => {
+    // Fetch Transactions
+    builder
+      .addCase(fetchTransactions.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchTransactions.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.transactions = action.payload;
+        state.lastSync = new Date();
+        state.error = null;
+      })
+      .addCase(fetchTransactions.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      });
+
+    // Parse SMS Transaction
+    builder
+      .addCase(parseSMSTransaction.fulfilled, (state, action) => {
+        state.transactions.unshift(action.payload);
+      })
+      .addCase(parseSMSTransaction.rejected, (state, action) => {
+        state.error = action.payload as string;
+      });
+
+    // Create Manual Transaction
+    builder
+      .addCase(createManualTransaction.fulfilled, (state, action) => {
+        state.transactions.unshift(action.payload);
+      })
+      .addCase(createManualTransaction.rejected, (state, action) => {
+        state.error = action.payload as string;
+      });
+
+    // Update Transaction
+    builder
+      .addCase(updateTransactionThunk.fulfilled, (state, action) => {
+        const index = state.transactions.findIndex(t => t.id === action.payload.id);
+        if (index !== -1) {
+          state.transactions[index] = action.payload.transaction;
+        }
+      })
+      .addCase(updateTransactionThunk.rejected, (state, action) => {
+        state.error = action.payload as string;
+      });
+
+    // Delete Transaction
+    builder
+      .addCase(deleteTransactionThunk.fulfilled, (state, action) => {
+        state.transactions = state.transactions.filter(t => t.id !== action.payload);
+      })
+      .addCase(deleteTransactionThunk.rejected, (state, action) => {
+        state.error = action.payload as string;
+      });
   },
 });
 

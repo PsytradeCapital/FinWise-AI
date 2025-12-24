@@ -599,11 +599,27 @@ export class NaboCapitalService {
   }
 }
 
-// Export singleton instance
-export const naboCapitalService = new NaboCapitalService({
-  baseUrl: process.env.NABO_CAPITAL_API_URL || 'https://api.nabocapital.com/v1',
-  apiKey: process.env.NABO_CAPITAL_API_KEY || '',
-  clientId: process.env.NABO_CAPITAL_CLIENT_ID || '',
-  clientSecret: process.env.NABO_CAPITAL_CLIENT_SECRET || '',
-  environment: (process.env.NODE_ENV === 'production' ? 'production' : 'sandbox') as 'sandbox' | 'production',
-});
+// Export singleton instance - only create if environment variables are available
+let naboCapitalServiceInstance: NaboCapitalService | null = null;
+
+export const naboCapitalService = {
+  getInstance(): NaboCapitalService {
+    if (!naboCapitalServiceInstance) {
+      // Only create instance if we have the required environment variables
+      const baseUrl = process.env.NABO_CAPITAL_API_URL || 'https://api.nabocapital.com/v1';
+      const apiKey = process.env.NABO_CAPITAL_API_KEY || '';
+      const clientId = process.env.NABO_CAPITAL_CLIENT_ID || '';
+      const clientSecret = process.env.NABO_CAPITAL_CLIENT_SECRET || '';
+      const environment = (process.env.NODE_ENV === 'production' ? 'production' : 'sandbox') as 'sandbox' | 'production';
+
+      naboCapitalServiceInstance = new NaboCapitalService({
+        baseUrl,
+        apiKey,
+        clientId,
+        clientSecret,
+        environment,
+      });
+    }
+    return naboCapitalServiceInstance;
+  }
+};

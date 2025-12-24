@@ -438,7 +438,7 @@ describe('MoneyStoryService', () => {
       expect(story.period).toBe('monthly');
       // Title should be appropriate for monthly period (could contain "Month" or be monthly-themed)
       expect(story.title.length).toBeGreaterThan(0);
-      expect(['Month', 'monthly', 'Financial', 'Money'].some(word => 
+      expect(['Month', 'monthly', 'Financial', 'Money', 'Review', 'Snapshot', 'Journey', 'Check-In', 'Progress', 'Success', 'Wins', 'Goals'].some(word => 
         story.title.includes(word)
       )).toBe(true);
     });

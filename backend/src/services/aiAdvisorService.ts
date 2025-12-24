@@ -1,4 +1,4 @@
-import { Transaction, SpendingPattern, Anomaly, Advice, User, Notification } from '@shared/types';
+import { Transaction, SpendingPattern, Anomaly, Advice, User, Notification } from '../../../shared/src/types';
 import { AnomalyDetectionService } from './anomalyDetectionService';
 import { RecommendationEngine } from './recommendationEngine';
 import { NotificationService } from './notificationService';
@@ -430,4 +430,158 @@ export class AIAdvisorService {
 
     return report;
   }
+
+  /**
+   * Generate AI advice for a user
+   */
+  async generateAdvice(userId: string): Promise<Advice[]> {
+    try {
+      logger.info('Generating AI advice', { userId });
+      
+      // This would typically fetch user data and generate advice
+      // For now, return mock advice
+      const advice: Advice[] = [
+        {
+          id: `advice-${userId}-${Date.now()}`,
+          userId,
+          type: 'spending',
+          title: 'Optimize Your Spending',
+          message: 'Consider reducing discretionary spending by 10% to improve your savings rate.',
+          priority: 'medium',
+          actionable: true,
+          createdAt: new Date(),
+          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        }
+      ];
+
+      return advice;
+    } catch (error) {
+      logger.error('Error generating AI advice', { userId, error });
+      throw error;
+    }
+  }
+
+  /**
+   * Analyze spending patterns for a user
+   */
+  async analyzeSpendingPatterns(userId: string): Promise<SpendingPattern[]> {
+    try {
+      logger.info('Analyzing spending patterns', { userId });
+      
+      // This would typically analyze user transactions
+      // For now, return mock patterns
+      const patterns: SpendingPattern[] = [
+        {
+          userId,
+          category: 'Food & Dining',
+          averageMonthly: 15000,
+          trend: 'increasing',
+          anomalyScore: 0.15,
+          lastAnalyzed: new Date(),
+          confidence: 0.85,
+        }
+      ];
+
+      return patterns;
+    } catch (error) {
+      logger.error('Error analyzing spending patterns', { userId, error });
+      throw error;
+    }
+  }
+
+  /**
+   * Generate savings offer for a user
+   */
+  async generateSavingsOffer(userId: string, transactionId?: string): Promise<any> {
+    try {
+      logger.info('Generating savings offer', { userId, transactionId });
+      
+      return {
+        id: `offer-${userId}-${Date.now()}`,
+        userId,
+        type: 'round_up_savings',
+        title: 'Round Up Your Purchase',
+        description: 'Save the spare change from this transaction automatically',
+        amount: 50, // KES
+        validUntil: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+        transactionId
+      };
+    } catch (error) {
+      logger.error('Error generating savings offer', { userId, error });
+      throw error;
+    }
+  }
+
+  /**
+   * Generate savings offer for a user
+   */
+  async generateSavingsOffer(userId: string, transactionId?: string): Promise<any> {
+    try {
+      logger.info('Generating savings offer', { userId, transactionId });
+      
+      return {
+        id: `offer-${userId}-${Date.now()}`,
+        userId,
+        type: 'round_up_savings',
+        title: 'Round Up Your Purchase',
+        description: 'Save the spare change from this transaction automatically',
+        amount: 50, // KES
+        validUntil: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+        transactionId
+      };
+    } catch (error) {
+      logger.error('Error generating savings offer', { userId, error });
+      throw error;
+    }
+  }
+
+  /**
+   * Generate emergency savings offer
+   */
+  async generateEmergencySavingsOffer(userId: string): Promise<any> {
+    try {
+      logger.info('Generating emergency savings offer', { userId });
+      
+      return {
+        id: `emergency-offer-${userId}-${Date.now()}`,
+        userId,
+        type: 'emergency_savings',
+        title: 'Emergency Savings Boost',
+        description: 'Save extra to recover from unusual spending',
+        amount: 100, // KES
+        validUntil: new Date(Date.now() + 12 * 60 * 60 * 1000), // 12 hours
+        priority: 'high'
+      };
+    } catch (error) {
+      logger.error('Error generating emergency savings offer', { userId, error });
+      throw error;
+    }
+  }
+
+  /**
+   * Health check for the service
+   */
+  async healthCheck(): Promise<{ status: string; message: string }> {
+    try {
+      // Check if all dependent services are healthy
+      const anomalyHealth = await this.anomalyDetectionService.healthCheck();
+      const recommendationHealth = await this.recommendationEngine.healthCheck();
+
+      const allHealthy = [anomalyHealth, recommendationHealth]
+        .every(health => health.status === 'healthy');
+
+      return {
+        status: allHealthy ? 'healthy' : 'degraded',
+        message: allHealthy ? 'AI Advisor service is operational' : 'Some dependent services are unhealthy'
+      };
+    } catch (error) {
+      return {
+        status: 'unhealthy',
+        message: `AI Advisor service error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
+  }
 }
+
+// Export singleton instance
+export const aiAdvisorService = new AIAdvisorService();

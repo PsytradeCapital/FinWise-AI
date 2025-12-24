@@ -231,7 +231,7 @@ describe('SecurityService', () => {
     it('should delete specified data types', async () => {
       const deletionRequest = {
         userId: 'user123',
-        dataTypes: ['transactions', 'personal_info'] as const,
+        dataTypes: ['transactions', 'personal_info'] as ('transactions' | 'personal_info' | 'biometric' | 'financial_accounts' | 'all')[],
         reason: 'User requested deletion',
         requestedBy: 'user@example.com',
       };
@@ -262,7 +262,7 @@ describe('SecurityService', () => {
     it('should delete all data when requested', async () => {
       const deletionRequest = {
         userId: 'user123',
-        dataTypes: ['all'] as const,
+        dataTypes: ['all'] as ('transactions' | 'personal_info' | 'biometric' | 'financial_accounts' | 'all')[],
         reason: 'Complete account deletion',
         requestedBy: 'user@example.com',
       };

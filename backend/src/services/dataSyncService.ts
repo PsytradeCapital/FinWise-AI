@@ -1,4 +1,5 @@
 import { db } from '../config/firebase';
+import { FieldValue } from 'firebase-admin/firestore';
 import { logger } from '../utils/logger';
 import { 
   User, 
@@ -135,7 +136,7 @@ export class DataSyncService {
       await docRef.update({
         ...data,
         lastModified: new Date(),
-        version: db.FieldValue.increment(1),
+        version: FieldValue.increment(1),
         syncedDevices: targetDevices.map(d => d.deviceId)
       });
 
@@ -341,6 +342,42 @@ export class DataSyncService {
     } catch (error) {
       logger.error('Failed to perform full sync:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Sync user data across devices
+   */
+  async syncUserData(userId: string): Promise<void> {
+    try {
+      logger.info('Syncing user data across devices', { userId });
+      
+      // Get all user devices
+      const devices = await this.getUserDevices(userId);
+      
+      // Sync data to all devices
+      for (const device of devices) {
+        await this.updateDeviceActivity(device.deviceId);
+      }
+      
+      logger.info('User data synced successfully', { userId, deviceCount: devices.length });
+    } catch (error) {
+      logger.error('Failed to sync user data', { userId, error });
+      throw error;
+    }
+  }
+
+  /**
+   * Health check for the service
+   */
+  async healthCheck(): Promise<boolean> {
+    try {
+      // Test basic Firestore connectivity
+      await db.collection('health_check').limit(1).get();
+      return true;
+    } catch (error) {
+      logger.error('Data sync service health check failed', { error });
+      return false;
     }
   }
 

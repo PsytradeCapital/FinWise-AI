@@ -13,6 +13,7 @@ import naboCapitalRoutes from './naboCapital';
 import authRoutes from './auth';
 import localizationRoutes from './localization';
 import syncRoutes from './sync';
+import integrationRoutes from './integration';
 
 const router = Router();
 
@@ -34,6 +35,7 @@ router.use(`${API_VERSION}/nabo-capital`, naboCapitalRoutes);
 router.use(`${API_VERSION}/auth`, authRoutes);
 router.use(`${API_VERSION}/localization`, localizationRoutes);
 router.use(`${API_VERSION}/sync`, syncRoutes);
+router.use(`${API_VERSION}/integration`, integrationRoutes);
 
 // API info endpoint
 router.get('/', (req, res) => {
@@ -56,6 +58,7 @@ router.get('/', (req, res) => {
       auth: `${API_VERSION}/auth`,
       localization: `${API_VERSION}/localization`,
       sync: `${API_VERSION}/sync`,
+      integration: `${API_VERSION}/integration`,
     },
   });
 });

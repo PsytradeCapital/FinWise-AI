@@ -390,7 +390,9 @@ export class BankingService {
     const totalProviders = this.clients.size;
     let status: 'healthy' | 'degraded' | 'unhealthy';
 
-    if (healthyCount === totalProviders) {
+    if (totalProviders === 0) {
+      status = 'unhealthy';
+    } else if (healthyCount === totalProviders) {
       status = 'healthy';
     } else if (healthyCount > 0) {
       status = 'degraded';

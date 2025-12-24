@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { logger } from '../utils/logger';
@@ -36,7 +36,7 @@ export interface SecurityConfig {
   biometric: BiometricAuthConfig;
   fraudDetection: FraudDetectionConfig;
   jwtSecret: string;
-  jwtExpiresIn: string;
+  jwtExpiresIn: string | number;
   bcryptRounds: number;
 }
 
@@ -112,7 +112,7 @@ export class SecurityService {
   }
 
   /**
-   * Encrypt sensitive data using AES-256-GCM
+   * Encrypt sensitive data using AES-256-CBC
    */
   encryptData(plaintext: string, additionalData?: string): EncryptedData {
     try {
@@ -122,13 +122,18 @@ export class SecurityService {
       // Derive key from master key and salt
       const key = crypto.pbkdf2Sync(this.masterKey, salt, 100000, this.config.encryption.keyLength, 'sha256');
       
-      const cipher = crypto.createCipher(this.config.encryption.algorithm, key);
-      cipher.setAAD(Buffer.from(additionalData || '', 'utf8'));
+      const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
       
       let encrypted = cipher.update(plaintext, 'utf8', 'hex');
       encrypted += cipher.final('hex');
       
-      const tag = cipher.getAuthTag();
+      // Create HMAC for authentication
+      const hmac = crypto.createHmac('sha256', key);
+      hmac.update(encrypted);
+      if (additionalData) {
+        hmac.update(additionalData);
+      }
+      const tag = hmac.digest();
 
       const result: EncryptedData = {
         encryptedData: encrypted,
@@ -162,9 +167,20 @@ export class SecurityService {
       // Derive key from master key and salt
       const key = crypto.pbkdf2Sync(this.masterKey, salt, 100000, this.config.encryption.keyLength, 'sha256');
       
-      const decipher = crypto.createDecipher(this.config.encryption.algorithm, key);
-      decipher.setAuthTag(tag);
-      decipher.setAAD(Buffer.from(additionalData || '', 'utf8'));
+      const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+      
+      // Verify HMAC first
+      const hmac = crypto.createHmac('sha256', key);
+      hmac.update(encryptedData.encryptedData);
+      if (additionalData) {
+        hmac.update(additionalData);
+      }
+      const expectedTag = hmac.digest();
+      const providedTag = Buffer.from(encryptedData.tag, 'hex');
+      
+      if (!crypto.timingSafeEqual(expectedTag, providedTag)) {
+        throw new Error('Authentication failed');
+      }
       
       let decrypted = decipher.update(encryptedData.encryptedData, 'hex', 'utf8');
       decrypted += decipher.final('utf8');
@@ -210,13 +226,15 @@ export class SecurityService {
   /**
    * Generate JWT token
    */
-  generateJWT(payload: object, expiresIn?: string): string {
+  generateJWT(payload: object, expiresIn?: string | number): string {
     try {
-      const token = jwt.sign(payload, this.config.jwtSecret, {
+      const options: any = {
         expiresIn: expiresIn || this.config.jwtExpiresIn,
         issuer: 'finwise-ai',
         audience: 'finwise-ai-app',
-      });
+      };
+
+      const token = jwt.sign(payload, this.config.jwtSecret, options);
 
       logger.info('JWT token generated', { 
         expiresIn: expiresIn || this.config.jwtExpiresIn,

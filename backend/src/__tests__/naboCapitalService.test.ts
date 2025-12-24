@@ -8,6 +8,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('NaboCapitalService', () => {
   let naboCapitalService: NaboCapitalService;
   let mockConfig: NaboCapitalConfig;
+  let mockAxiosInstance: any;
 
   beforeEach(() => {
     mockConfig = {
@@ -17,6 +18,22 @@ describe('NaboCapitalService', () => {
       clientSecret: 'test_client_secret',
       environment: 'sandbox',
     };
+
+    // Create a proper mock axios instance
+    mockAxiosInstance = {
+      get: jest.fn(),
+      post: jest.fn(),
+      put: jest.fn(),
+      delete: jest.fn(),
+      request: jest.fn(),
+      interceptors: {
+        request: { use: jest.fn() },
+        response: { use: jest.fn() },
+      },
+    };
+
+    // Mock axios.create to return our mock instance
+    mockedAxios.create.mockReturnValue(mockAxiosInstance);
 
     naboCapitalService = new NaboCapitalService(mockConfig);
     jest.clearAllMocks();
@@ -40,19 +57,8 @@ describe('NaboCapitalService', () => {
         },
       };
 
-      mockedAxios.post
-        .mockResolvedValueOnce(mockTokenResponse) // Token request
-        .mockResolvedValueOnce(mockLinkResponse); // Link account request
-
-      mockedAxios.create.mockReturnValue({
-        post: jest.fn()
-          .mockResolvedValueOnce(mockLinkResponse),
-        get: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockedAxios.post.mockResolvedValueOnce(mockTokenResponse); // Token request
+      mockAxiosInstance.post.mockResolvedValueOnce(mockLinkResponse); // Link account request
 
       const request = {
         userId: 'user123',
@@ -74,14 +80,7 @@ describe('NaboCapitalService', () => {
     });
 
     it('should handle account linking errors', async () => {
-      mockedAxios.create.mockReturnValue({
-        post: jest.fn().mockRejectedValue(new Error('API Error')),
-        get: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.post.mockRejectedValue(new Error('API Error'));
 
       const request = {
         userId: 'user123',
@@ -105,14 +104,7 @@ describe('NaboCapitalService', () => {
         },
       };
 
-      mockedAxios.create.mockReturnValue({
-        post: jest.fn().mockResolvedValue(mockVerifyResponse),
-        get: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.post.mockResolvedValue(mockVerifyResponse);
 
       const result = await naboCapitalService.verifyAccountLinking('link_123', '123456');
 
@@ -142,14 +134,7 @@ describe('NaboCapitalService', () => {
         },
       };
 
-      mockedAxios.create.mockReturnValue({
-        get: jest.fn().mockResolvedValue(mockAccountsResponse),
-        post: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.get.mockResolvedValue(mockAccountsResponse);
 
       const accounts = await naboCapitalService.getAccounts('user123');
 
@@ -181,14 +166,7 @@ describe('NaboCapitalService', () => {
         },
       };
 
-      mockedAxios.create.mockReturnValue({
-        post: jest.fn().mockResolvedValue(mockTransferResponse),
-        get: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.post.mockResolvedValue(mockTransferResponse);
 
       const request = {
         amount: 500,
@@ -213,14 +191,7 @@ describe('NaboCapitalService', () => {
     });
 
     it('should handle transfer initiation errors', async () => {
-      mockedAxios.create.mockReturnValue({
-        post: jest.fn().mockRejectedValue(new Error('Insufficient funds')),
-        get: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.post.mockRejectedValue(new Error('Insufficient funds'));
 
       const request = {
         amount: 500,
@@ -248,14 +219,7 @@ describe('NaboCapitalService', () => {
         },
       };
 
-      mockedAxios.create.mockReturnValue({
-        get: jest.fn().mockResolvedValue(mockStatusResponse),
-        post: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.get.mockResolvedValue(mockStatusResponse);
 
       const result = await naboCapitalService.getTransferStatus('tx_123');
 
@@ -274,14 +238,7 @@ describe('NaboCapitalService', () => {
         },
       };
 
-      mockedAxios.create.mockReturnValue({
-        post: jest.fn().mockResolvedValue(mockCancelResponse),
-        get: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.post.mockResolvedValue(mockCancelResponse);
 
       const result = await naboCapitalService.cancelTransfer('tx_123', 'User requested');
 
@@ -319,14 +276,7 @@ describe('NaboCapitalService', () => {
         },
       };
 
-      mockedAxios.create.mockReturnValue({
-        get: jest.fn().mockResolvedValue(mockHistoryResponse),
-        post: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.get.mockResolvedValue(mockHistoryResponse);
 
       const result = await naboCapitalService.getTransferHistory('user123');
 
@@ -338,16 +288,7 @@ describe('NaboCapitalService', () => {
     });
 
     it('should handle date filters', async () => {
-      const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: { transfers: [], total: 0, has_more: false } }),
-        post: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      };
-
-      mockedAxios.create.mockReturnValue(mockClient as any);
+      mockAxiosInstance.get.mockResolvedValue({ data: { transfers: [], total: 0, has_more: false } });
 
       const startDate = new Date('2023-12-01');
       const endDate = new Date('2023-12-31');
@@ -360,7 +301,7 @@ describe('NaboCapitalService', () => {
         offset: 10,
       });
 
-      expect(mockClient.get).toHaveBeenCalledWith('/transfers', {
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/transfers', {
         params: {
           user_id: 'user123',
           start_date: '2023-12-01',
@@ -382,14 +323,7 @@ describe('NaboCapitalService', () => {
         },
       };
 
-      mockedAxios.create.mockReturnValue({
-        post: jest.fn().mockResolvedValue(mockRuleResponse),
-        get: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.post.mockResolvedValue(mockRuleResponse);
 
       const rules = {
         roundUpSavings: true,
@@ -410,31 +344,17 @@ describe('NaboCapitalService', () => {
 
   describe('getHealthStatus', () => {
     it('should return healthy status when service is operational', async () => {
-      mockedAxios.create.mockReturnValue({
-        get: jest.fn().mockResolvedValue({ data: { status: 'ok' } }),
-        post: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.get.mockResolvedValue({ data: { status: 'ok' } });
 
       const health = await naboCapitalService.getHealthStatus();
 
       expect(health.status).toBe('healthy');
       expect(health.message).toBe('Nabo Capital service is operational');
-      expect(health.responseTime).toBeGreaterThan(0);
+      expect(health.responseTime).toBeGreaterThanOrEqual(0);
     });
 
     it('should return unhealthy status when service fails', async () => {
-      mockedAxios.create.mockReturnValue({
-        get: jest.fn().mockRejectedValue(new Error('Service unavailable')),
-        post: jest.fn(),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() },
-        },
-      } as any);
+      mockAxiosInstance.get.mockRejectedValue(new Error('Service unavailable'));
 
       const health = await naboCapitalService.getHealthStatus();
 

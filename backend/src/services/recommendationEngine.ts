@@ -1,4 +1,4 @@
-import { Transaction, SpendingPattern, Advice, User } from '@shared/types';
+import { Transaction, SpendingPattern, Advice, User } from '../../../shared/src/types';
 import { logger } from '../utils/logger';
 
 /**
@@ -523,5 +523,53 @@ export class RecommendationEngine {
       // Finally, sort by creation date (newest first)
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
+  }
+
+  /**
+   * Generate recommendations for a user
+   */
+  async generateRecommendations(userId: string): Promise<Advice[]> {
+    try {
+      logger.info('Generating recommendations', { userId });
+      
+      // This would typically analyze user data and generate recommendations
+      // For now, return mock recommendations
+      const recommendations: Advice[] = [
+        {
+          id: `rec-${userId}-${Date.now()}`,
+          userId,
+          type: 'saving',
+          title: 'Increase Your Savings Rate',
+          message: 'Try to save at least 20% of your income by setting up automatic transfers.',
+          priority: 'high',
+          actionable: true,
+          createdAt: new Date(),
+          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        }
+      ];
+
+      return recommendations;
+    } catch (error) {
+      logger.error('Error generating recommendations', { userId, error });
+      throw error;
+    }
+  }
+
+  /**
+   * Health check for the service
+   */
+  async healthCheck(): Promise<{ status: string; message: string }> {
+    try {
+      // Perform basic health checks
+      return {
+        status: 'healthy',
+        message: 'Recommendation Engine is operational'
+      };
+    } catch (error) {
+      return {
+        status: 'unhealthy',
+        message: `Recommendation Engine error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
   }
 }

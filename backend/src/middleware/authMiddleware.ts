@@ -362,3 +362,6 @@ export const requestLogger = (req: AuthenticatedRequest, res: Response, next: Ne
 
   next();
 };
+
+// Export default middleware (most commonly used)
+export const authMiddleware = authenticateJWT;

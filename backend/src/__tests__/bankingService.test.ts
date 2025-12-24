@@ -375,6 +375,9 @@ describe('BankingService', () => {
     });
 
     it('should return unhealthy status when no providers are working', async () => {
+      // Clear all clients to simulate no providers
+      (bankingService as any).clients.clear();
+      
       const health = await bankingService.getHealthStatus();
 
       expect(health.status).toBe('unhealthy');
