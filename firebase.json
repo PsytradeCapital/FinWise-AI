@@ -1,5 +1,22 @@
 {
+  "functions": [
+    {
+      "codebase": "default",
+
+      "source": "backend",
+      "runtime": "nodejs18",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
   "firestore": {
+    "database": "(default)",
+    "location": "africa-south1",
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
@@ -13,6 +30,9 @@
     "firestore": {
       "port": 8080
     },
+    "functions": {
+      "port": 5001
+    },
     "storage": {
       "port": 9199
     },
@@ -20,5 +40,19 @@
       "enabled": true,
       "port": 4000
     }
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 }

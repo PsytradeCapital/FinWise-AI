@@ -11,6 +11,7 @@
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm start",
     "build": "npm run build:shared && npm run build:backend && npm run typecheck:frontend",
+    "build:all": "npm run build:shared && npm run build:backend && npm run typecheck:frontend",
     "build:shared": "cd shared && npm run build",
     "build:backend": "cd backend && npm run build",
     "build:frontend": "cd frontend && npm run build:android",
@@ -32,12 +33,25 @@
     "format:frontend": "cd frontend && npm run format",
     "clean": "npm run clean:shared && npm run clean:backend",
     "clean:shared": "cd shared && npm run clean",
-    "clean:backend": "cd backend && npm run clean"
+    "clean:backend": "cd backend && npm run clean",
+    "deploy": "scripts\\deploy.bat",
+    "deploy:backend": "firebase deploy --only functions",
+    "deploy:database": "firebase deploy --only firestore,storage"
   },
-  "keywords": ["fintech", "ai", "mobile", "savings", "react-native"],
+  "keywords": [
+    "fintech",
+    "ai",
+    "mobile",
+    "savings",
+    "react-native"
+  ],
   "author": "FinWise AI Team",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "firebase-functions": "^7.0.2"
   }
 }
