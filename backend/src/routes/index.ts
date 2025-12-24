@@ -8,6 +8,11 @@ import storyRoutes from './stories';
 import notificationRoutes from './notifications';
 import reportRoutes from './reports';
 import mpesaRoutes from './mpesa';
+import bankingRoutes from './banking';
+import naboCapitalRoutes from './naboCapital';
+import authRoutes from './auth';
+import localizationRoutes from './localization';
+import syncRoutes from './sync';
 
 const router = Router();
 
@@ -24,6 +29,11 @@ router.use(`${API_VERSION}/stories`, storyRoutes);
 router.use(`${API_VERSION}/notifications`, notificationRoutes);
 router.use(`${API_VERSION}/reports`, reportRoutes);
 router.use(`${API_VERSION}/mpesa`, mpesaRoutes);
+router.use(`${API_VERSION}/banking`, bankingRoutes);
+router.use(`${API_VERSION}/nabo-capital`, naboCapitalRoutes);
+router.use(`${API_VERSION}/auth`, authRoutes);
+router.use(`${API_VERSION}/localization`, localizationRoutes);
+router.use(`${API_VERSION}/sync`, syncRoutes);
 
 // API info endpoint
 router.get('/', (req, res) => {
@@ -41,9 +51,13 @@ router.get('/', (req, res) => {
       notifications: `${API_VERSION}/notifications`,
       reports: `${API_VERSION}/reports`,
       mpesa: `${API_VERSION}/mpesa`,
+      banking: `${API_VERSION}/banking`,
+      naboCapital: `${API_VERSION}/nabo-capital`,
+      auth: `${API_VERSION}/auth`,
+      localization: `${API_VERSION}/localization`,
+      sync: `${API_VERSION}/sync`,
     },
   });
-});
 });
 
 export default router;

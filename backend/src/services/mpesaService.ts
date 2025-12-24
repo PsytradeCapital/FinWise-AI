@@ -94,6 +94,11 @@ export class MpesaService {
       this.tokenExpiry = new Date(Date.now() + 55 * 60 * 1000);
 
       logger.info('M-Pesa access token obtained successfully');
+      
+      if (!this.accessToken) {
+        throw new Error('No access token received from M-Pesa API');
+      }
+      
       return this.accessToken;
 
     } catch (error) {
@@ -336,7 +341,8 @@ export class MpesaService {
       return '254' + cleaned.slice(1);
     } else if (cleaned.startsWith('254')) {
       return cleaned;
-    } else if (cleaned.length === 9) {
+    } else if (cleaned.length === 9 && (cleaned.startsWith('7') || cleaned.startsWith('11'))) {
+      // Only format 9-digit numbers that start with valid Kenyan mobile prefixes (7xx or 11x)
       return '254' + cleaned;
     }
     
@@ -348,7 +354,7 @@ export class MpesaService {
    */
   validatePhoneNumber(phoneNumber: string): boolean {
     const formatted = this.formatPhoneNumber(phoneNumber);
-    // Kenyan phone numbers should be 12 digits starting with 254
+    // Kenyan phone numbers should be 12 digits starting with 254 and mobile prefix (7 or 1)
     return /^254[17]\d{8}$/.test(formatted);
   }
 
