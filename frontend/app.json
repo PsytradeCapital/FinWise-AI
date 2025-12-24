@@ -1,0 +1,39 @@
+{
+  "name": "FinWiseAI",
+  "displayName": "FinWise AI",
+  "version": "1.0.0",
+  "description": "AI-powered financial management application",
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "splash": {
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff"
+  },
+  "platforms": ["ios", "android"],
+  "ios": {
+    "bundleIdentifier": "com.finwiseai.app",
+    "buildNumber": "1.0.0",
+    "supportsTablet": true,
+    "infoPlist": {
+      "NSCameraUsageDescription": "This app uses camera for document scanning",
+      "NSMicrophoneUsageDescription": "This app uses microphone for voice input",
+      "NSLocationWhenInUseUsageDescription": "This app uses location for transaction context",
+      "NSFaceIDUsageDescription": "This app uses Face ID for secure authentication"
+    }
+  },
+  "android": {
+    "package": "com.finwiseai.app",
+    "versionCode": 1,
+    "permissions": [
+      "android.permission.CAMERA",
+      "android.permission.RECORD_AUDIO",
+      "android.permission.ACCESS_FINE_LOCATION",
+      "android.permission.ACCESS_COARSE_LOCATION",
+      "android.permission.RECEIVE_SMS",
+      "android.permission.READ_SMS",
+      "android.permission.USE_BIOMETRIC",
+      "android.permission.USE_FINGERPRINT"
+    ]
+  }
+}
