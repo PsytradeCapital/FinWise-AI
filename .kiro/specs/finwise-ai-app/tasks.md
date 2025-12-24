@@ -163,11 +163,11 @@ This implementation plan breaks down the FinWise AI development into discrete, m
     - **Property 15: Streak Tracking Accuracy**
     - **Validates: Requirements 4.5**
 
-- [ ] 8. Checkpoint - Ensure core AI and savings features work
+- [x] 8. Checkpoint - Ensure core AI and savings features work
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 9. Create Financial Dashboard and Reporting
-  - [ ] 9.1 Build spending summary components
+- [-] 9. Create Financial Dashboard and Reporting
+  - [x] 9.1 Build spending summary components
     - Create daily, weekly, and monthly spending aggregation
     - Implement interactive pie charts with drill-down functionality
     - Build trend analysis visualization components
@@ -185,7 +185,7 @@ This implementation plan breaks down the FinWise AI development into discrete, m
     - **Property 18: Trend Analysis Accuracy**
     - **Validates: Requirements 5.3**
 
-  - [ ] 9.5 Implement milestone tracking and PDF export
+  - [x] 9.5 Implement milestone tracking and PDF export
     - Create savings milestone detection system
     - Build celebratory notification system for achievements
     - Implement PDF report generation for financial data
@@ -200,7 +200,7 @@ This implementation plan breaks down the FinWise AI development into discrete, m
     - **Validates: Requirements 5.5**
 
 - [ ] 10. Implement Money Story Generator
-  - [ ] 10.1 Create narrative generation system
+  - [x] 10.1 Create narrative generation system
     - Build story template system for spending narratives
     - Implement sentiment analysis for spending behavior
     - Create actionable suggestion integration within stories

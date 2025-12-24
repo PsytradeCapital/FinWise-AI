@@ -1,4 +1,4 @@
-import { Notification, User, Anomaly, Advice, SpendingPattern } from '@shared/types';
+import { Notification, User, Anomaly, Advice, SpendingPattern } from '@finwise-ai/shared';
 import { logger } from '../utils/logger';
 
 /**

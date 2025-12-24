@@ -6,6 +6,7 @@ import categoryRoutes from './categories';
 import adviceRoutes from './advice';
 import storyRoutes from './stories';
 import notificationRoutes from './notifications';
+import reportRoutes from './reports';
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.use(`${API_VERSION}/categories`, categoryRoutes);
 router.use(`${API_VERSION}/advice`, adviceRoutes);
 router.use(`${API_VERSION}/stories`, storyRoutes);
 router.use(`${API_VERSION}/notifications`, notificationRoutes);
+router.use(`${API_VERSION}/reports`, reportRoutes);
 
 // API info endpoint
 router.get('/', (req, res) => {
@@ -35,6 +37,7 @@ router.get('/', (req, res) => {
       advice: `${API_VERSION}/advice`,
       stories: `${API_VERSION}/stories`,
       notifications: `${API_VERSION}/notifications`,
+      reports: `${API_VERSION}/reports`,
     },
   });
 });
