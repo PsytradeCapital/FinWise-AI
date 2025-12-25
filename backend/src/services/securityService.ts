@@ -162,7 +162,6 @@ export class SecurityService {
     try {
       const salt = Buffer.from(encryptedData.salt, 'hex');
       const iv = Buffer.from(encryptedData.iv, 'hex');
-      const tag = Buffer.from(encryptedData.tag, 'hex');
       
       // Derive key from master key and salt
       const key = crypto.pbkdf2Sync(this.masterKey, salt, 100000, this.config.encryption.keyLength, 'sha256');

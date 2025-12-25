@@ -1,6 +1,6 @@
 import { ApiResponse, Transaction, User, SavingsGoal, Category, Notification, MoneyStory, Advice } from '@finwise-ai/shared';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api/v1';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://fin-wise-ai-iota.vercel.app/api';
 
 class ApiService {
   private token: string | null = null;

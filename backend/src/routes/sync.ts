@@ -1,4 +1,5 @@
-import express, { Request, Response } from 'express';
+import * as express from 'express';
+import { Request, Response } from 'express';
 import { dataSyncService, DeviceInfo } from '../services/dataSyncService';
 import { offlineDataService } from '../services/offlineDataService';
 import { authMiddleware } from '../middleware/authMiddleware';

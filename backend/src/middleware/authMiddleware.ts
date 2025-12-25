@@ -44,7 +44,7 @@ export const authenticateJWT = (req: AuthenticatedRequest, res: Response, next: 
 
     // Extract additional request metadata
     req.deviceId = req.headers['x-device-id'] as string;
-    req.ipAddress = req.ip || req.connection.remoteAddress || 'unknown';
+    req.ipAddress = req.ip || 'unknown';
 
     logger.info('User authenticated successfully', {
       userId: req.user.id,
@@ -86,7 +86,7 @@ export const optionalAuth = (req: AuthenticatedRequest, res: Response, next: Nex
         };
 
         req.deviceId = req.headers['x-device-id'] as string;
-        req.ipAddress = req.ip || req.connection.remoteAddress || 'unknown';
+        req.ipAddress = req.ip || 'unknown';
 
         logger.info('Optional authentication successful', {
           userId: req.user.id,
@@ -201,11 +201,13 @@ export const rateLimit = (options: {
     const windowStart = now - options.windowMs;
 
     // Clean up old entries
-    for (const [key, value] of requests.entries()) {
+    const entriesToDelete: string[] = [];
+    requests.forEach((value, key) => {
       if (value.resetTime < windowStart) {
-        requests.delete(key);
+        entriesToDelete.push(key);
       }
-    }
+    });
+    entriesToDelete.forEach(key => requests.delete(key));
 
     const userRequests = requests.get(identifier);
     
@@ -317,7 +319,7 @@ export const requireBiometric = (req: AuthenticatedRequest, res: Response, next:
 /**
  * Security Headers Middleware
  */
-export const securityHeaders = (req: Request, res: Response, next: NextFunction): void => {
+export const securityHeaders = (_req: Request, res: Response, next: NextFunction): void => {
   // Set security headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');

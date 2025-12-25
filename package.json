@@ -1,70 +1,37 @@
 {
   "name": "finwise-ai",
   "version": "1.0.0",
-  "description": "AI-powered mobile financial management application",
-  "main": "index.js",
+  "description": "AI-powered financial management application",
+  "main": "backend/src/index.ts",
   "scripts": {
-    "start": "npm run start:backend",
-    "start:backend": "cd backend && npm start",
-    "start:frontend": "cd frontend && npm start",
+    "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
+    "build:shared": "cd shared && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm start",
-    "build": "npm run build:shared && npm run build:backend && npm run typecheck:frontend",
-    "build:all": "npm run build:shared && npm run build:backend && npm run typecheck:frontend",
-    "build:shared": "cd shared && npm run build",
-    "build:backend": "cd backend && npm run build",
-    "build:frontend": "cd frontend && npm run build:android",
-    "typecheck": "npm run typecheck:shared && npm run typecheck:backend && npm run typecheck:frontend",
-    "typecheck:shared": "cd shared && npm run build",
-    "typecheck:backend": "cd backend && npm run typecheck",
-    "typecheck:frontend": "cd frontend && npm run typecheck",
     "test": "npm run test:shared && npm run test:backend && npm run test:frontend",
     "test:shared": "cd shared && npm test",
     "test:backend": "cd backend && npm test",
     "test:frontend": "cd frontend && npm test",
-    "lint": "npm run lint:shared && npm run lint:backend && npm run lint:frontend",
-    "lint:shared": "cd shared && npm run lint",
-    "lint:backend": "cd backend && npm run lint",
-    "lint:frontend": "cd frontend && npm run lint",
-    "format": "npm run format:shared && npm run format:backend && npm run format:frontend",
-    "format:shared": "cd shared && npm run format",
-    "format:backend": "cd backend && npm run format",
-    "format:frontend": "cd frontend && npm run format",
-    "clean": "npm run clean:shared && npm run clean:backend",
-    "clean:shared": "cd shared && npm run clean",
-    "clean:backend": "cd backend && npm run clean",
-    "deploy": "scripts\\deploy.bat",
-    "deploy:backend": "firebase deploy --only functions",
-    "deploy:database": "firebase deploy --only firestore,storage"
+    "deploy": "vercel --prod",
+    "deploy:firebase": "firebase deploy"
   },
   "keywords": [
     "fintech",
     "ai",
-    "mobile",
-    "savings",
-    "react-native"
+    "financial-management",
+    "react",
+    "typescript",
+    "firebase"
   ],
-  "author": "FinWise AI Team",
+  "author": "Martin Mbugua",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/supertest": "^6.0.3",
-    "concurrently": "^8.2.2",
-    "jest": "^30.2.0",
-    "supertest": "^7.1.4",
-    "typescript": "^4.9.5"
+    "concurrently": "^8.2.2"
   },
-  "dependencies": {
-    "@types/bcrypt": "^6.0.0",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.0.3",
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.5",
-    "express": "^5.2.1",
-    "firebase-functions": "^7.0.2",
-    "html-pdf-node": "^1.0.8",
-    "winston": "^3.19.0"
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

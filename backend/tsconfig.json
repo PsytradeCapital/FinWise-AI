@@ -9,10 +9,12 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2018",
+    "target": "ES2020",
     "downlevelIteration": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ES2020"],
+    "types": ["node", "jest"]
   },
   "compileOnSave": true,
   "include": [
@@ -22,6 +24,8 @@
     "node_modules",
     "lib",
     "**/*.test.ts",
-    "**/__tests__/**"
+    "**/__tests__/**",
+    "../node_modules/@types/mocha",
+    "**/node_modules/@types/mocha/**"
   ]
 }
